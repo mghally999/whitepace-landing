@@ -50,7 +50,7 @@ export function Testimonials() {
             <ul
               ref={trackRef}
               onScroll={onScroll}
-              className="grid auto-cols-[88%] grid-flow-col gap-7 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] sm:auto-cols-[60%] lg:grid-flow-row lg:auto-cols-auto lg:grid-cols-3 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
+              className="grid grid-flow-col auto-cols-[85%] gap-7 snap-x snap-mandatory overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] sm:auto-cols-[47%] lg:auto-cols-[calc((100%-3.5rem)/3)] [&::-webkit-scrollbar]:hidden"
             >
               {TESTIMONIALS.items.map((t, i) => (
                 <li

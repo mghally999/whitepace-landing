@@ -141,6 +141,8 @@ export const INTEGRATIONS = {
 export const TESTIMONIALS = {
   title: "See what our trusted users Say",
   highlight: "Say",
+  // 6 cards so the carousel pages through (3 per view on desktop, 1 on mobile).
+  // highlighted pattern (i % 3 !== 0) keeps the design's "first white, rest blue" rhythm per row.
   items: [
     {
       quote:
@@ -152,17 +154,41 @@ export const TESTIMONIALS = {
     },
     {
       quote:
-        "If you haven't tried whitepace yet, you need to give it a shot for your next event. It's so easy and intuitive to get a new event setup and if you need any help their customer service is seriously amazing.",
-      name: "Jessie Owner",
-      role: "Founder, XYZ Company",
+        "We moved our whole team onto whitepace and never looked back. Planning, notes and tasks finally live in one place, and the collaboration features keep everyone perfectly in sync.",
+      name: "Marcus Lee",
+      role: "Product Lead, Northwind",
       avatar: "/figma/avatar-2.png",
       highlighted: true,
     },
     {
       quote:
-        "If you haven't tried whitepace yet, you need to give it a shot for your next event. It's so easy and intuitive to get a new event setup and if you need any help their customer service is seriously amazing.",
-      name: "Jessie Owner",
-      role: "Founder, XYZ Company",
+        "whitepace is the first tool that my non-technical teammates actually enjoy using. Setup took minutes and the End-To-End Encryption gave our compliance team real peace of mind.",
+      name: "Aisha Rahman",
+      role: "Operations Manager, Brightline",
+      avatar: "/figma/avatar-3.png",
+      highlighted: true,
+    },
+    {
+      quote:
+        "The web clipper and integrations changed how I work. I capture an idea on mobile, refine it on desktop, and it's instantly shared with the team. Honestly it's seriously amazing.",
+      name: "Diego Fernández",
+      role: "Engineering Manager, Loop",
+      avatar: "/figma/avatar-1.png",
+      highlighted: false,
+    },
+    {
+      quote:
+        "Customer support is fast and genuinely helpful, and the app keeps getting better. whitepace replaced three separate tools for us and our productivity has never been higher.",
+      name: "Hannah Cole",
+      role: "Marketing Director, Vanta Co.",
+      avatar: "/figma/avatar-2.png",
+      highlighted: true,
+    },
+    {
+      quote:
+        "Open source, open format, and it syncs everywhere we are. whitepace is exactly the dependable, no-lock-in workspace our distributed team had been searching for.",
+      name: "Tomas Novak",
+      role: "Team Lead, Helix Labs",
       avatar: "/figma/avatar-3.png",
       highlighted: true,
     },
