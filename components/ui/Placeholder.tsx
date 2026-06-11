@@ -56,20 +56,15 @@ export function Placeholder({
   );
 }
 
-/** Generates a light-blue dashboard-like placeholder as an inline SVG data URI. */
+/**
+ * The design renders product-screenshot areas as clean solid light-blue
+ * (#C4DEFD) rounded rectangles — confirmed against both the supplied PNGs and
+ * the Figma "Illustration" nodes. We reproduce exactly that, as an inline SVG
+ * data URI (no extra request, no CLS, supports the loading skeleton).
+ */
 function makeSvg(w: number, h: number) {
   const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>
-    <defs>
-      <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-        <stop offset='0' stop-color='#C4DEFD'/>
-        <stop offset='1' stop-color='#A7CEFC'/>
-      </linearGradient>
-    </defs>
-    <rect width='${w}' height='${h}' rx='16' fill='url(#g)'/>
-    <rect x='${w * 0.08}' y='${h * 0.12}' width='${w * 0.5}' height='${h * 0.07}' rx='8' fill='#ffffff' opacity='0.7'/>
-    <rect x='${w * 0.08}' y='${h * 0.26}' width='${w * 0.84}' height='${h * 0.42}' rx='12' fill='#ffffff' opacity='0.55'/>
-    <rect x='${w * 0.08}' y='${h * 0.76}' width='${w * 0.36}' height='${h * 0.1}' rx='8' fill='#4F9CF9' opacity='0.8'/>
-    <rect x='${w * 0.5}' y='${h * 0.76}' width='${w * 0.42}' height='${h * 0.1}' rx='8' fill='#ffffff' opacity='0.7'/>
+    <rect width='${w}' height='${h}' rx='16' fill='#C4DEFD'/>
   </svg>`;
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }

@@ -1,7 +1,7 @@
-import { CSSProperties } from "react";
 import { Logo } from "./Logo";
 import {
   DropboxIcon,
+  GmailIcon,
   GoogleCalendarIcon,
   GoogleDriveIcon,
   OutlookIcon,
@@ -15,55 +15,66 @@ type OrbitProps = {
   className?: string;
 };
 
-// viewBox is 0..520; center 260. Three rings the dots ride on.
+// viewBox/box is 520 units; center = 260. Three dashed rings the items ride on.
+const BOX = 520;
 const RINGS = [120, 180, 240];
 
-type Dot = { ring: number; angle: number; color: string; size: number };
+/** angle: 0 = top, clockwise (deg). Position as % of the square box (responsive). */
+function pos(angle: number, ring: number) {
+  const r = RINGS[ring];
+  const rad = (angle * Math.PI) / 180;
+  const pctR = (r / BOX) * 100;
+  return {
+    left: `${50 + pctR * Math.sin(rad)}%`,
+    top: `${50 - pctR * Math.cos(rad)}%`,
+  };
+}
+
+type Dot = { angle: number; ring: number; color: string; size: number };
 const COLLAB_DOTS: Dot[] = [
-  { ring: 2, angle: 200, color: "#E01E5A", size: 26 },
-  { ring: 1, angle: 295, color: "#FFE492", size: 24 },
-  { ring: 1, angle: 45, color: "#2EB67D", size: 26 },
-  { ring: 2, angle: 25, color: "#4F9CF9", size: 26 },
-  { ring: 0, angle: 150, color: "#E01E5A", size: 16 },
-  { ring: 2, angle: 115, color: "#4F9CF9", size: 16 },
+  { angle: 0, ring: 1, color: "#FFE492", size: 24 },
+  { angle: 55, ring: 2, color: "#4F9CF9", size: 28 },
+  { angle: 130, ring: 1, color: "#2EB67D", size: 26 },
+  { angle: 200, ring: 2, color: "#4F9CF9", size: 16 },
+  { angle: 250, ring: 1, color: "#E01E5A", size: 28 },
+  { angle: 315, ring: 2, color: "#E01E5A", size: 18 },
 ];
 
-const APP_BUBBLES = [
-  { ring: 2, angle: 200, Icon: DropboxIcon, label: "Dropbox" },
-  { ring: 1, angle: 265, Icon: SlackIcon, label: "Slack" },
-  { ring: 2, angle: 320, Icon: OutlookIcon, label: "Outlook" },
-  { ring: 1, angle: 30, Icon: GoogleDriveIcon, label: "Google Drive" },
-  { ring: 2, angle: 95, Icon: GoogleCalendarIcon, label: "Google Calendar" },
+type Bubble = { angle: number; ring: number; Icon: typeof GmailIcon; label: string };
+const APP_BUBBLES: Bubble[] = [
+  { angle: 2, ring: 2, Icon: GmailIcon, label: "Gmail" },
+  { angle: 52, ring: 1, Icon: SlackIcon, label: "Slack" },
+  { angle: 112, ring: 2, Icon: GoogleDriveIcon, label: "Google Drive" },
+  { angle: 184, ring: 1, Icon: GoogleCalendarIcon, label: "Google Calendar" },
+  { angle: 256, ring: 2, Icon: OutlookIcon, label: "Outlook" },
+  { angle: 306, ring: 1, Icon: DropboxIcon, label: "Dropbox" },
 ];
 
-// Per-ring rotation: alternating direction + varied speed for organic motion.
-const RING_ANIM = [
-  { anim: "animate-orbit", rev: "animate-orbit-rev", dur: "28s" },
-  { anim: "animate-orbit-rev", rev: "animate-orbit", dur: "34s" },
-  { anim: "animate-orbit", rev: "animate-orbit-rev", dur: "40s" },
-];
+const SPIN = "42s";
 
 /**
- * Larger concentric dashed-ring integration graphic with a centered whitepace
- * mark. Dots/app-icons sit on rotating ring layers so they continuously orbit
- * the center; app icons counter-rotate to stay upright. Motion is disabled
- * under prefers-reduced-motion (global rule freezes the rotation).
+ * Concentric dashed-ring integration graphic with a centered whitepace mark.
+ * Items are positioned STATICALLY around the rings (so they're always evenly
+ * distributed — even at rest / reduced-motion), then a single wrapper rotates
+ * to make them orbit; icons counter-rotate to stay upright.
  */
 export function IntegrationOrbit({ variant, className }: OrbitProps) {
+  const isApps = variant === "apps";
+
   return (
     <div
-      className={cn("relative mx-auto aspect-square w-full max-w-[520px]", className)}
+      className={cn("relative mx-auto aspect-square w-full max-w-[460px]", className)}
       role="img"
       aria-label={
-        variant === "apps"
-          ? "whitepace connected to Dropbox, Slack, Outlook, Google Drive and Google Calendar"
+        isApps
+          ? "whitepace connected to Gmail, Slack, Google Drive, Google Calendar, Outlook and Dropbox"
           : "Collaboration graphic showing whitepace at the center of orbiting contributors"
       }
     >
       {/* dashed rings */}
       <svg
-        viewBox="0 0 520 520"
-        className="absolute inset-0 h-full w-full text-brand"
+        viewBox={`0 0 ${BOX} ${BOX}`}
+        className={cn("absolute inset-0 h-full w-full", isApps ? "text-white" : "text-brand")}
         fill="none"
         aria-hidden="true"
       >
@@ -74,82 +85,78 @@ export function IntegrationOrbit({ variant, className }: OrbitProps) {
             cy="260"
             r={r}
             stroke="currentColor"
-            strokeOpacity="0.3"
+            strokeOpacity={isApps ? 0.35 : 0.3}
             strokeWidth="1.5"
-            strokeDasharray="3 8"
+            strokeDasharray="2 9"
+            strokeLinecap="round"
           />
         ))}
       </svg>
 
-      {/* center mark */}
-      <div className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-navy shadow-card">
-        <Logo tone="light" withWordmark={false} className="scale-125" />
+      {/* rotating layer holds every orbiting item */}
+      <div className="absolute inset-0 animate-orbit" style={{ animationDuration: SPIN }}>
+        {isApps
+          ? APP_BUBBLES.map(({ angle, ring, Icon, label }) => (
+              <Item key={label} angle={angle} ring={ring} counterRotate>
+                <span className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white shadow-card">
+                  <Icon className="h-7 w-7" title={label} />
+                </span>
+              </Item>
+            ))
+          : COLLAB_DOTS.map((d, i) => (
+              <Item key={i} angle={d.angle} ring={d.ring}>
+                <span
+                  className="block rounded-full"
+                  style={{ width: d.size, height: d.size, background: d.color }}
+                />
+              </Item>
+            ))}
       </div>
 
-      {/* orbiting items, one rotating layer each (grouped by ring speed) */}
-      {variant === "collab"
-        ? COLLAB_DOTS.map((d, i) => (
-            <OrbitLayer key={i} ring={d.ring} angle={d.angle}>
-              <span
-                className="block rounded-full"
-                style={{ width: d.size, height: d.size, background: d.color }}
-              />
-            </OrbitLayer>
-          ))
-        : APP_BUBBLES.map(({ ring, angle, Icon, label }) => (
-            <OrbitLayer key={label} ring={ring} angle={angle} counterRotate>
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-card">
-                <Icon className="h-8 w-8" title={label} />
-              </span>
-            </OrbitLayer>
-          ))}
+      {/* center mark (outside the rotating layer) */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        {isApps ? (
+          <span className="flex h-[68px] w-[68px] items-center justify-center rounded-full bg-white shadow-card">
+            <Logo tone="dark" withWordmark={false} className="scale-[1.4]" />
+          </span>
+        ) : (
+          <span className="flex h-[68px] w-[68px] items-center justify-center rounded-2xl bg-navy shadow-card">
+            <Logo tone="light" withWordmark={false} className="scale-[1.4]" />
+          </span>
+        )}
+      </div>
     </div>
   );
 }
 
 /**
- * A full-size layer that rotates around the center, placing one child on a ring.
- * The starting angle is set via a negative animation-delay (so it composes with
- * the continuous spin instead of fighting a static transform). The child is
- * pushed from the top edge to the ring radius with padding (% of the square box,
- * so it scales responsively). Icons counter-rotate at the same rate to stay upright.
+ * One orbiting item: statically positioned at (angle, ring) via %, so it is
+ * always distributed. The optional counter-rotation cancels the wrapper's spin
+ * so icons stay upright (dots don't need it).
  */
-function OrbitLayer({
-  ring,
+function Item({
   angle,
+  ring,
   counterRotate = false,
   children,
 }: {
-  ring: number;
   angle: number;
+  ring: number;
   counterRotate?: boolean;
   children: React.ReactNode;
 }) {
-  const r = RINGS[ring];
-  const a = RING_ANIM[ring];
-  const durS = parseFloat(a.dur);
-  // negative delay = start the loop partway = desired initial angle
-  const delay = `-${((angle / 360) * durS).toFixed(2)}s`;
-  // distance from the top edge (260) down to the ring (260 - r), as % of box width
-  const padTopPct = ((260 - r) / 520) * 100;
-
-  const layerStyle: CSSProperties = { animationDuration: a.dur, animationDelay: delay };
-  const counterStyle: CSSProperties = { animationDuration: a.dur, animationDelay: delay };
-
   return (
-    <div className={cn("absolute inset-0", a.anim)} style={layerStyle}>
-      <div
-        className="absolute inset-0 flex justify-center"
-        style={{ paddingTop: `${padTopPct}%` }}
-      >
-        {counterRotate ? (
-          <div className={a.rev} style={counterStyle}>
-            {children}
-          </div>
-        ) : (
-          children
-        )}
-      </div>
+    <div
+      className="absolute -translate-x-1/2 -translate-y-1/2"
+      style={pos(angle, ring)}
+    >
+      {counterRotate ? (
+        <div className="animate-orbit-rev" style={{ animationDuration: SPIN }}>
+          {children}
+        </div>
+      ) : (
+        children
+      )}
     </div>
   );
 }
