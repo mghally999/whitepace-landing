@@ -139,28 +139,31 @@ export const INTEGRATIONS = {
 };
 
 export const TESTIMONIALS = {
-  title: "What Our Clients Says",
-  highlight: "Says",
+  title: "See what our trusted users Say",
+  highlight: "Say",
   items: [
     {
       quote:
-        "Whitepace is designed as a collaboration tool for businesses that is a full project management solution.",
-      name: "Oberon Shaw, MCH",
-      role: "Head of Talent Acquisition, North America",
+        "If you haven't tried whitepace yet, you need to give it a shot for your next event. It's so easy and intuitive to get a new event setup and if you need any help their customer service is seriously amazing.",
+      name: "Jessie Owner",
+      role: "Founder, XYZ Company",
+      avatar: "/figma/avatar-1.png",
       highlighted: false,
     },
     {
       quote:
-        "Whitepace is designed as a collaboration tool for businesses that is a full project management solution.",
-      name: "Oberon Shaw, MCH",
-      role: "Head of Talent Acquisition, North America",
+        "If you haven't tried whitepace yet, you need to give it a shot for your next event. It's so easy and intuitive to get a new event setup and if you need any help their customer service is seriously amazing.",
+      name: "Jessie Owner",
+      role: "Founder, XYZ Company",
+      avatar: "/figma/avatar-2.png",
       highlighted: true,
     },
     {
       quote:
-        "Whitepace is designed as a collaboration tool for businesses that is a full project management solution.",
-      name: "Oberon Shaw, MCH",
-      role: "Head of Talent Acquisition, North America",
+        "If you haven't tried whitepace yet, you need to give it a shot for your next event. It's so easy and intuitive to get a new event setup and if you need any help their customer service is seriously amazing.",
+      name: "Jessie Owner",
+      role: "Founder, XYZ Company",
+      avatar: "/figma/avatar-3.png",
       highlighted: true,
     },
   ],

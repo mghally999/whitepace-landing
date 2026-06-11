@@ -32,7 +32,7 @@ export function FeatureRow({ data }: { data: FeatureRowData }) {
 
   const media =
     data.media === "orbit-collab" ? (
-      <IntegrationOrbit variant="collab" />
+      <IntegrationOrbit />
     ) : (
       <Placeholder
         width={560}

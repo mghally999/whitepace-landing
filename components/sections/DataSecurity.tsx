@@ -1,11 +1,12 @@
+import Image from "next/image";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-import { NodeDiagram } from "@/components/ui/NodeDiagram";
 import { DATA_SECURITY } from "@/lib/content";
 
+/** "100% your data" — text (left), exact Figma node diagram (right). */
 export function DataSecurity() {
   return (
     <Section id={DATA_SECURITY.id} labelledBy="data-heading" theme="light">
@@ -26,7 +27,14 @@ export function DataSecurity() {
           </Reveal>
 
           <Reveal delay={120}>
-            <NodeDiagram />
+            <Image
+              src="/figma/data-nodes.svg"
+              alt="whitepace secures your data with encryption keys, an open format, security and end-to-end encryption"
+              width={759}
+              height={400}
+              unoptimized
+              className="mx-auto w-full max-w-[560px] motion-safe:animate-float"
+            />
           </Reveal>
         </div>
       </Container>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -16,8 +17,7 @@ export function Testimonials() {
   const goTo = (i: number) => {
     const clamped = Math.max(0, Math.min(i, TESTIMONIALS.items.length - 1));
     setActive(clamped);
-    const track = trackRef.current;
-    const card = track?.children[clamped] as HTMLElement | undefined;
+    const card = trackRef.current?.children[clamped] as HTMLElement | undefined;
     card?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
   };
 
@@ -44,13 +44,13 @@ export function Testimonials() {
           <div
             role="group"
             aria-roledescription="carousel"
-            aria-label="Client testimonials"
+            aria-label="Customer testimonials"
             className="relative mt-14"
           >
             <ul
               ref={trackRef}
               onScroll={onScroll}
-              className="grid auto-cols-[88%] grid-flow-col gap-6 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] sm:auto-cols-[60%] lg:grid-flow-row lg:auto-cols-auto lg:grid-cols-3 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
+              className="grid auto-cols-[88%] grid-flow-col gap-7 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] sm:auto-cols-[60%] lg:grid-flow-row lg:auto-cols-auto lg:grid-cols-3 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
             >
               {TESTIMONIALS.items.map((t, i) => (
                 <li
@@ -59,36 +59,42 @@ export function Testimonials() {
                   aria-roledescription="slide"
                   aria-label={`${i + 1} of ${TESTIMONIALS.items.length}`}
                   className={cn(
-                    "flex snap-start flex-col rounded-lg p-8 transition-shadow",
+                    "flex snap-start flex-col rounded-lg p-8 shadow-card",
                     t.highlighted
-                      ? "bg-brand text-white shadow-card"
-                      : "bg-[var(--bg)] text-ink shadow-card dark:bg-[var(--bg-alt)] dark:text-white"
+                      ? "bg-brand text-white"
+                      : "bg-[var(--bg)] text-ink dark:bg-[var(--bg-alt)] dark:text-white"
                   )}
                 >
-                  <Quote
-                    className={cn(
-                      "h-9 w-9 rotate-180",
-                      t.highlighted ? "text-white" : "text-navy dark:text-white"
-                    )}
-                    aria-hidden="true"
+                  {/* avatar at top */}
+                  <Image
+                    src={t.avatar}
+                    alt={`${t.name} avatar`}
+                    width={56}
+                    height={56}
+                    className="h-14 w-14 rounded-full object-cover ring-4 ring-white/40"
                   />
-                  <p className="mt-4 flex-1 text-base leading-relaxed md:text-lg">{t.quote}</p>
-                  <hr className={cn("my-6 border-t", t.highlighted ? "border-white/30" : "border-ink/10 dark:border-white/15")} />
-                  <div className="flex items-center gap-4">
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-bold",
-                        t.highlighted ? "bg-white/20 text-white" : "bg-sky/40 text-navy"
-                      )}
-                    >
-                      OS
-                    </span>
+
+                  <p
+                    className={cn(
+                      "mt-7 flex-1 text-base leading-relaxed",
+                      t.highlighted ? "text-white/95" : "text-ink/80 dark:text-white/80"
+                    )}
+                  >
+                    {t.quote}
+                  </p>
+
+                  {/* name/role + stars */}
+                  <div className="mt-8 flex items-end justify-between gap-4">
                     <div>
-                      <p className="font-semibold">{t.name}</p>
-                      <p className={cn("text-sm", t.highlighted ? "text-white/80" : "text-ink/70 dark:text-white/70")}>
+                      <p className="font-bold">{t.name}</p>
+                      <p className={cn("text-sm", t.highlighted ? "text-white/80" : "text-ink/60 dark:text-white/60")}>
                         {t.role}
                       </p>
+                    </div>
+                    <div className="flex shrink-0 gap-1" aria-label="Rated 5 out of 5">
+                      {Array.from({ length: 5 }).map((_, s) => (
+                        <Star key={s} className="h-4 w-4 fill-accent text-accent" aria-hidden="true" />
+                      ))}
                     </div>
                   </div>
                 </li>
