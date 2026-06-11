@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Design tokens mirrored as CSS variables for non-Tailwind usage. */
+  --navy: #043873;
+  --brand: #4f9cf9;
+  --accent: #ffe492;
+  --sky: #a7cefc;
+  --ink: #212529;
+
+  /* Light theme surface/text mapping */
+  --bg: #ffffff;
+  --bg-alt: #ffffff;
+  --surface-dark: #043873;
+  --text: #212529;
+  --text-on-dark: #ffffff;
+  --muted: rgba(33, 37, 41, 0.8);
+}
+
+.dark {
+  /* Real inverted dark palette (not the V2 light skin). */
+  --bg: #021f3f;
+  --bg-alt: #042a55;
+  --surface-dark: #021a36;
+  --text: #e8eef7;
+  --text-on-dark: #ffffff;
+  --muted: rgba(232, 238, 247, 0.72);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* offset anchored sections below the sticky navbar */
+  scroll-padding-top: 96px;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-feature-settings: "cv11", "ss01";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: -100px;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+/* Honor reduced-motion globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Ensure reveal-on-scroll content is never trapped invisible. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Scroll-reveal: progressive enhancement only.
+   Content is visible by default; the hidden→reveal animation is applied ONLY
+   when JS is available (html.js), so no-JS users and crawlers always see it. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  will-change: opacity, transform;
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
